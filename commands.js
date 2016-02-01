@@ -9,53 +9,6 @@ exports.commands = {
     lenny: function(target, room, user) {
         this.send("( ͡° ͜ʖ ͡°)");
     },
-    eval: function(target, room, user) {
-        if (!user.isDev() || !target) return false;
-        let battle;
-        if (room && room.battle) {
-            battle = room.battle;
-        }
-        try {
-            let result = eval(target.trim());
-            this.send("<< " + JSON.stringify(result));
-        }
-        catch (e) {
-            this.send("<< " + e.name + ": " + e.message)
-        }
-    },
-    c: "custom",
-    custom: function(target, room, user) {
-        if (!user.isDev() || !target) return false;
-        if (target.indexOf("[") === 0 && target.indexOf("]") > 1) {
-            let targetRoomId = toId(target.split("[")[1].split("]")[0], true);
-            if (!Rooms.rooms.has(targetRoomId)) return this.send("I am not in the room you specified.");
-            this.room = Rooms.get(target.split("[")[1].split("]")[0]);
-            target = target.split("]").slice(1).join("]").trim();
-        }
-        if (!target) return false;
-        this.send(target);
-    },
-    reload: function(target, room, user) {
-        if (!user.isDev()) return false;
-        let success = Tools.reload();
-        this.send(success ? "Reloaded commands." : "Failed to reload commands.");
-    },
-    rename: "login",
-    login: function(target, room, user) {
-        if (!user.isDev()) return false;
-        if (!target) {
-            log("monitor", "Manually logging in as " + Config.bot.name + " - pass: " + Config.bot.pass);
-            this.send("Renaming to " + Config.bot.name);
-            Parse.login(Config.bot.name, Config.bot.pass);
-            return;
-        }
-        target = target.split(",");
-        let nick = target[0];
-        let pass = target.length > 1 ? target.slice(1).join(",").trim() : null;
-        log("monitor", "Manually logging in as " + nick + " - pass: " + pass);
-        Parse.login(nick, pass);
-        this.send("Attempting to rename to " + nick);
-    },
     //settings
     addchar: function(target, room, user) {
         if (!this.can("set") || !room) return false;
