@@ -39,16 +39,17 @@ var User = class {
     can(action, targetRoom, targetUser, details) {
         if (this.isDev()) return true;
         if (action === "promote") {
+            if(!targetUser) return false;
             let userRank = Config.permissions[this.botRank];
             let targetRank = targetUser.botRank || Db("ranks").get(toId(targetUser), " ");
             if (!userRank.promote) return false;
             if (userRank.promote.includes(targetRank) && userRank.promote.includes(details) && targetRank !== details) {
-                targetUser ? targetUser.botPromote(details) : Db("ranks").set(toId(targetUser), details);
                 return true;
             }
             return false;
         }
         if (["ban", "lock", "mute"].includes(action)) {
+            if(!targetUser) return false;
             let userRank = Config.permissions[this.botRank];
             let targetRank = targetUser.botRank || Db("ranks").get(toId(targetUser), " ");
             if (!userRank[action]) return false;
