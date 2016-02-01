@@ -23,6 +23,7 @@ var User = class {
         if (name.charAt(0) in Config.ranks) {
             this.ranks.set(room.id || toId(room), name.charAt(0));
         }
+        Plugins.mail.receive(this);
         Db("seen").set(this.userid, [Date.now(), room.name]);
     }
     onLeave(room) {
@@ -80,7 +81,7 @@ var User = class {
     hasRank(room, rank) {
         if(rank === "off" && !this.isDev()) return false;
         if(rank === "on") return true;
-        let roomRank = room ? this.getRank(room.id) : Config.defaultRank;
+        let roomRank = room ? this.getRank(room.id) : this.globalRank;
         if (((Config.ranks[roomRank] || 0) >= Config.ranks[rank]) || this.hasBotRank(rank)) return true;
         return false;
     }
@@ -109,8 +110,8 @@ let getUser = Users.get = function(username) {
 
 let renameUser = Users.rename = function(oldId, newName) {
     if (!Users.users.has(oldId)) return false; //already renamed
-    Monitor.transferRecords(oldId, toId(newName));
     users.set(toId(newName), Users.get(oldId));
+    Monitor.transferRecords(oldId, toId(newName));
     users.delete(oldId);
     let tarUser = getUser(newName);
     //change attributes of the new user
