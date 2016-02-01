@@ -132,8 +132,6 @@ global.Plugins = require("./plugins-parser").Plugins;
 global.Monitor = require("./monitor.js").Monitor;
 global.commandParser = require("./command-parser.js").commandParser;
 global.Commands = require("./commands.js").commands;
-global.BotGame = require("./botGame.js").botGame;
-global.BotGamePlayer = require("./botGame.js").botGamePlayer;
 global.Users = require("./users.js");
 global.Rooms = require("./rooms.js");
 
