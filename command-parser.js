@@ -5,8 +5,8 @@ class Context {
         this.room = room;
         this.command = command;
         this.target = target;
-        this.canBroadcast = this.user.can(command, this.room);
         this.targetUser = this.getTargetUser();
+        this.canBroadcast = this.can(command, " ");
     }
 
     getTargetUser() {
