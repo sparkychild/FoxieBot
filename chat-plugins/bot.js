@@ -87,7 +87,7 @@ exports.commands = {
             if (Config.ranks[a] > Config.ranks[b]) return -1;
             return 1;
         }).map(function(r) {
-            return rankNames[r] + " (" + auth[r].length + ")\n" + auth[r].sort();
+            return rankNames[r] + " (" + auth[r].length + ")\n" + auth[r].sort().join(", ");
         }).join("\n\n");
         Tools.uploadToHastebin(buffer, function(link) {
             this.send("Bot Auth: " + link);
