@@ -63,13 +63,13 @@ exports.commands = {
             return this.send("Moderation for " + modAspect + " will be applied to users of rank \"" + modSetting + "\" and below.");
         }
         let targetCommand = toId(parts[0]);
-        let mainCommand = null;
+        let mainCommand;
         if(Commands[targetCommand] && !Config.settableCommands[targetCommand] && typeof Commands[targetCommand] === "string"){
             mainCommand = Commands[targetCommand];
         }
         if (Config.settableCommands[mainCommand || targetCommand]) {
             if (!this.can("set") || !room) return false; // roomowner only
-            targetCommand = mainCommand;
+            if(mainCommand) targetCommand = mainCommand;
             if (!parts[1]) return this.parse("/help set");
             let targetSetting = parts[1].toLowerCase();
             if (!Config.ranks[targetSetting] && !["on", "off"].includes(targetSetting)) return this.parse("/help set");

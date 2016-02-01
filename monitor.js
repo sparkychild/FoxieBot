@@ -57,14 +57,14 @@ class ResourceMonitor {
     setPattern(command) {
         this.pattern.push(command);
         if (this.pattern.length > 5) {
-            console.log("MONITOR: [LOCKDOWN]")
+            log("monitor", "[LOCKDOWN]")
             this.lockdown = true;
         }
         setTimeout(function() {
             this.pattern.shift();
             if (this.pattern.length < 5) {
                 this.lockdown = false;
-                console.log("MONITOR: [ENDLOCKDOWN]")
+                log("monitor", "[ENDLOCKDOWN]")
             }
 
         }.bind(this), 1800000)
@@ -91,14 +91,14 @@ class ResourceMonitor {
         //set mark room as spam
         if (this.rooms[room.id] > this.settings.room && !this.alertRooms[room.id]) {
             this.alertRooms[room.id] = 1;
-            console.log("MONITOR: [ROOM - " + room.id + "] high usage.");
+            log("monitor", "[ROOM - " + room.id + "] high usage.");
             setTimeout(function() {
                 delete this.alertRooms[room.id];
             }.bind(this), 3600000);
         }
         //moderate spammy rooms harshly
         if (this.alertRooms[room.id] && Object.values(this.users[user.userid]).sum() > this.settings.alertRoom) {
-            console.log("MONITOR: [USER: " + user.userid + "] spamming commands in high alert " + (!pm ? " room - " + room.id : " pms") + ".");
+            log("monitor", "[USER: " + user.userid + "] spamming commands in high alert " + (!pm ? " room - " + room.id : " pms") + ".");
             this.warnings[user.userid]++;
             this.settings.moderate(user.userid, this.warnings[user.userid]);
             //search for patterns
@@ -110,7 +110,7 @@ class ResourceMonitor {
         }
         //catching pm spammers
         if (this.lockdown && pm && Object.values(this.users[user.userid]).sum() >= 4) {
-            console.log("MONITOR: [USER: " + user.userid + "] PM spamming commands during bot lockdown.");
+            log("monitor", "[USER: " + user.userid + "] PM spamming commands during bot lockdown.");
             this.warnings[user.userid]++;
             this.settings.moderate(user.userid, this.warnings[user.userid]);
             //dont search for patterns
@@ -118,8 +118,8 @@ class ResourceMonitor {
         //general users
         //moderating for patterns
         for (var cmd in this.users[user.userid]) {
-            if (this.users[user.userid][cmd] >= this.settings.pattern) {
-                console.log("MONITOR: [USER: " + user.userid + "] Abuse of " + cmd + " command.")
+            if (this.users[user.userid][cmd] >= this.settings.pattern && this.pattern.includes(cmd)) {
+                log("monitor", "[USER: " + user.userid + "] Abuse of " + cmd + " command.")
                 this.setPattern(cmd);
                 this.warnings[user.userid]++;
                 this.settings.moderate(user.userid, this.warnings[user.userid]);
@@ -127,7 +127,7 @@ class ResourceMonitor {
         }
         //general
         if (Object.values(this.users[user.userid]).sum() >= this.settings.user) {
-            console.log("MONITOR: [USER: " + user.userid + "] spamming commands in" + (!pm ? " room - " + room.id : " pms") + ".");
+            log("monitor", "[USER: " + user.userid + "] spamming commands in" + (!pm ? " room - " + room.id : " pms") + ".");
             this.warnings[user.userid]++;
             this.settings.moderate(user.userid, this.warnings[user.userid]);
             //search for patterns
