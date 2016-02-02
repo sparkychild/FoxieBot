@@ -49,7 +49,7 @@ exports.commands = {
         return this.send("This room is currently marked as " + (Db("settings").get([room.id, "isPrivate"], false) ? "private." : "public."));
     },
     set: function(target, room, user) {
-        if ((!this.can("set") && !this.can("addcom")) || !room) return false;
+        if (!this.can("set") && !this.can("addcom")) return false;
         if (!target) return this.parse("/help set");
         let parts = target.replace(/\, /g, ",").split(",");
         if (parts[0] === "mod") {

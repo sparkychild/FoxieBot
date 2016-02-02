@@ -56,6 +56,7 @@ exports.settableCommands = {
     "settings": true,
     "banword": true,
     "autoban": true,
+    "usage": true,
 };
 
 // settable aspects of moderation
