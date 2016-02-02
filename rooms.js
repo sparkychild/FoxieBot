@@ -75,7 +75,7 @@ class Room {
 
     userLeave(username) {
         this.users.delete(toId(username));
-        if (Users.users.has(toId(username))) Users.get(toId(username)).onLeave(this.name || this.id);
+        if (Users.users.has(toId(username))) Users.get(toId(username)).onLeave(this);
     }
 
     userRename(oldId, newName) {
