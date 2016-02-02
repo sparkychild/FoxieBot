@@ -9,5 +9,7 @@ exports.help = {
     "unautoban": ["/unautoban [user] - Removes the user from the room's blacklist."],
     "addcom": ["/addcom [command], [rank], [output] - adds a custom command to that room which users of specified rank and above can use, and will output the specified phrase."],
     "delcom": ["/delcom [command] - removes the command from the room's list of custom commands."],
-    "appendcom": ["/appendcom [command], [text] - adds an extra line to the command."]
-}
+    "appendcom": ["/appendcom [command], [text] - adds an extra line to the command."],
+    "seen": ["/seen [user] - checks when the bot has last seen the user."],
+    "usage": ["/usage [mon], (tier) - checks a Pokémon's usage."],
+};

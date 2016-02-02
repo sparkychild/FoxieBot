@@ -17,6 +17,7 @@ function getData(link, callback, https) {
 
 exports.commands = {
     seen: function(target, room, user) {
+        if(!target) return this.parse("/help seen");
         this.can("set");
         target = toId(target);
         let lastSeen = Db("seen").get(target, null);
@@ -56,11 +57,15 @@ exports.commands = {
     usage: function(target, room, user) {
         let baseLink = "http://www.smogon.com/stats/2015-12/";
         if (!target) return this.send(baseLink);
+        
         //get stats
         let parts = target.split(",");
-        if (!formatsData[toId(parts[0])]) return this.send("Invalid Pokémon.")
+        
+        if (!formatsData[toId(parts[0])]) return this.send("Invalid Pokémon.");
+        
         let tier = toId(parts[1]) || toId(formatsData[toId(parts[0])].tier).replace("nfe", "pu");
         let mon = toId(parts[0]);
+        
         if (!mon || !tier) return this.parse("/help usage");
 
         let self = this;
