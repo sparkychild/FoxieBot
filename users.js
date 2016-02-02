@@ -5,7 +5,7 @@ let users = Users.users = new Map();
 
 var User = class {
     constructor(name) {
-        this.name = name.slice(1);
+        this.name = (/[a-zA-Z0-9]/i.test(name.charAt(0)) ? name : name.slice(1));
         this.userid = toId(name);
         this.ranks = new Map();
         this.botRank = Db("ranks").get(this.userid, " ");
@@ -21,14 +21,15 @@ var User = class {
     }
     update(room, name) {
         if (name.charAt(0) in Config.ranks) {
-            this.ranks.set(room.id || toId(room), name.charAt(0));
+            this.ranks.set(room.id || toId(room, true), name.charAt(0));
+            this.name = (/[a-zA-Z0-9]/i.test(name.charAt(0)) ? name : name.slice(1));
         }
         Plugins.mail.receive(this);
-        Db("seen").set(this.userid, [Date.now(), room.name]);
+        updateSeen(this.userid, [Date.now(), room.name]);
     }
     onLeave(room) {
-        this.ranks.delete(toId(room));
-        Db("seen").set(this.userid, [Date.now(), room]);
+        this.ranks.delete(room.id);
+        updateSeen(this.userid, [Date.now(), room.name]);
     }
     botPromote(rank) {
         this.botRank = rank;
@@ -123,3 +124,15 @@ let renameUser = Users.rename = function(oldId, newName) {
 }
 
 module.exports = Users;
+
+let saving = false;
+function updateSeen (userid, data) {
+    Db("seen").object()[userid] = data;
+    if(!saving) {
+        saving = true;
+        setTimeout(function(){
+            Db.save();
+            saving = false;
+        }, 2000);
+    }
+}
