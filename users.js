@@ -133,6 +133,6 @@ function updateSeen (userid, data) {
         setTimeout(function(){
             Db.save();
             saving = false;
-        }, 2000);
+        }, 5000);
     }
 }
