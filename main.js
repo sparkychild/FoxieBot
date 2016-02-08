@@ -55,7 +55,7 @@ global.removeCommand = function(text) {
     return text.replace(/^\//i, "//").replace(/^\!/i, " !").replace(/^[\>]{2,}/i, ">");
 };
 
-global.getEST = function() {
+global.getEST = function(date) {
     function isDst(tarDate) {
         var deezNuts = new Date(tarDate);
         var deezMonth = deezNuts.getMonth() + 1;
