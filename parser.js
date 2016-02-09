@@ -69,7 +69,7 @@ exports.parse = {
                 message = parts.slice(3).join("|");
                 if (toId(parts[2])) {
                     user = Users.get(parts[2]);
-                    user.update(room, parts[3]);
+                    user.update(room, parts[2]);
                     room.moderate(user, message);
                     commandParser(message, user, room, !Config.monitorDefault);
                 }
