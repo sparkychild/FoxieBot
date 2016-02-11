@@ -70,7 +70,7 @@ class Room {
         let user = Users.get(toId(username));
         user.update(this, username);
         this.users.set(user.userid, username.charAt(0));
-        if (this.userIsBlacklisted(user.userid)) this.send(null, "/roomban " + user.userid + ", Blacklisted user.")
+        if (this.userIsBlacklisted(user.userid)) this.send(null, "/roomban " + user.userid + ", Blacklisted user.");
     }
 
     userLeave(username) {
@@ -237,7 +237,7 @@ class Room {
                                     continue;
                                 }
                                 if (wordSearch.test(tMsg)) {
-                                    let bwPoints = bannedWords[tWord]
+                                    let bwPoints = bannedWords[tWord];
                                     maxPoints = maxPoints > bwPoints ? maxPoints : bwPoints;
                                 }
                             }
@@ -278,13 +278,13 @@ let addRoom = Rooms.add = function(room) {
     if (rooms.has(roomid)) return getRoom(room);
     rooms.set(roomid, new Room(room));
     if (roomid !== "global") Db("autojoin").set(roomid, 1);
-}
+};
 
 let getRoom = Rooms.get = function(room) {
     let roomid = toId(room, true);
     if (!rooms.has(roomid)) addRoom(room);
     return rooms.get(roomid);
-}
+};
 
 let deleteRoom = Rooms.delete = function(room, keepAutojoin) {
     let roomid = toId(room, true);
@@ -295,6 +295,9 @@ let deleteRoom = Rooms.delete = function(room, keepAutojoin) {
         delete Db("autojoin").object()[roomid];
         Db.save();
     }
-}
+};
+
+Rooms.botGame = require("./botgame.js").game;
+Rooms.botGamePlayer = require("./botgame.js").player;
 
 module.exports = Rooms;

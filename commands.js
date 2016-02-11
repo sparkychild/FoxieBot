@@ -1,13 +1,14 @@
 'use strict';
 // use return false to show that the command didnt go through to prevent triggering false monitor moderations
+Tools.Formats = require("./data/pokemon.js").BattleFormatsData;
+Tools.Pokedex = require("./data/pokedex.js").BattlePokedex;
+Tools.helpEntries = require("./help.js").help;
+
 
 exports.commands = {
     say: function(target, room, user) {
         if (!this.can("say")) return false;
         return this.send(removeCommand(target));
-    },
-    lenny: function(target, room, user) {
-        this.send("( ͡° ͜ʖ ͡°)");
     },
     //settings
     addchar: function(target, room, user) {

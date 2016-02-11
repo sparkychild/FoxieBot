@@ -1,7 +1,5 @@
 'use strict';
 const http = require("http");
-let helpEntries = require("../help.js").help;
-let formatsData = require("../data/pokemon.js").BattleFormatsData;
 
 function getData(link, callback, https) {
     http.get(link, function(res) {
@@ -34,16 +32,16 @@ exports.commands = {
         if (!target) return this.parse("/guide");
         target = target.toLowerCase();
         this.can("say");
-        if (!helpEntries[target]) return false;
-        helpEntries[target].forEach(function(e) {
+        if (!Tools.helpEntries[target]) return false;
+        Tools.helpEntries[target].forEach(function(e) {
             this.send(e.replace(/^\//i, room ? room.commandCharacter[0] : Config.defaultCharacter));
         }.bind(this));
     },
     guide: function(target, room, user) {
         this.can("set");
         let useCommandCharacter = room ? room.commandCharacter[0] : Config.defaultCharacter[0];
-        let hastebin = Object.keys(helpEntries).sort().map(function(entry) {
-            return helpEntries[entry].join("\n").replace(/^\//i, useCommandCharacter).replace(/\n\//i, useCommandCharacter);
+        let hastebin = Object.keys(Tools.helpEntries).sort().map(function(entry) {
+            return Tools.helpEntries[entry].join("\n").replace(/^\//i, useCommandCharacter).replace(/\n\//i, useCommandCharacter);
         }.bind(this)).join("\n\n");
         Tools.uploadToHastebin("Bot Commands: \n\n" + hastebin, function(link) {
             this.send("Bot Guide: " + link);
@@ -55,15 +53,15 @@ exports.commands = {
         this.send(Monitor.username + "'s github repository: " + "https://github.com/sparkychild/FoxieBot");
     },
     usage: function(target, room, user) {
-        let baseLink = "http://www.smogon.com/stats/2015-12/";
+        let baseLink = "http://www.smogon.com/stats/2016-01/";
         if (!target) return this.send(baseLink);
         
         //get stats
         let parts = target.split(",");
         
-        if (!formatsData[toId(parts[0])]) return this.send("Invalid Pokémon.");
+        if (!Tools.Pokedex[toId(parts[0])]) return this.send("Invalid Pokémon.");
         
-        let tier = toId(parts[1]) || toId(formatsData[toId(parts[0])].tier).replace("nfe", "pu");
+        let tier = toId(parts[1]) || toId(Tools.Pokedex[toId(parts[0])].tier).replace("nfe", "pu");
         let mon = toId(parts[0]);
         
         if (!mon || !tier) return this.parse("/help usage");
