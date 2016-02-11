@@ -12,4 +12,12 @@ exports.help = {
     "appendcom": ["/appendcom [command], [text] - adds an extra line to the command."],
     "seen": ["/seen [user] - checks when the bot has last seen the user."],
     "usage": ["/usage [mon], (tier) - checks a Pokémon's usage."],
+    "signups": ["/signups [game] - creates a new game."],
+    "unownsletterchain": ["/unownsletterchain - On your turn enter a Pokémon that starts with the same letter as the last letter of the previous Pokémon - you have 15 seconds, no repeats within a round."],
+    "ulc": ["/unownsletterchain - On your turn enter a Pokémon that starts with the same letter as the last letter of the previous Pokémon - you have 15 seconds, no repeats within a round."],
+    "start":  ["/start - starts the current game."],
+    "end": ["/end - ends the current game."],
+    "join": ["/join - joins the current game."],
+    "leave": ["/leave - leaves the current game."],
+    "players": ["/players - view the list of players in the current game."],
 };

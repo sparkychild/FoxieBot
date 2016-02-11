@@ -9,7 +9,7 @@ exports.commands = {
     },
     "guess": "g",
     g: function(target, room, user) {
-        if (!room || !room.game) return false;
+        if (!room || !room.game || room.game.answerCommand !== "standard") return false;
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "guess " + target);
     },
