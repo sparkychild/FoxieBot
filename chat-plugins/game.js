@@ -19,27 +19,29 @@ exports.commands = {
         this.parse("/" + gameId + "leave");
     },
     players: function(target, room, user) {
-        if (!room || !this.can("game") || !room.game) return false;
+        if (!room || !this.can("games") || !room.game) return false;
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "players");
     },
     start: function(target, room, user) {
-        if (!room || !this.can("game") || !room.game) return false;
+        if (!room || !this.can("games") || !room.game) return false;
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "start");
     },
     end: function(target, room, user) {
-        if (!room || !this.can("game") || !room.game) return false;
+        if (!room || !this.can("games") || !room.game) return false;
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "end");
     },
     signups: function(target, room, user) {
-        if (!room || !this.can("game")) return false;
+        if (!room || !this.can("games")) return false;
         if(!target) this.parse("/help signups");
         let games = {
             "ulc": "unownsletterchain",
             "unownsletterchain": "unownsletterchain",
-        }
+            "bj": "blackjack",
+            "blackjack": "blackjack",
+        };
         let gameId = games[toId(target)];
         if (!gameId) return this.send("Invalid game.");
         this.parse("/" + gameId);

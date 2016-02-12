@@ -30,6 +30,7 @@ class Room {
     end() {
         //safely delete the room without causing issues with setInterval
         clearInterval(this.timer);
+        if (this.game) this.game.destroy();
     }
 
     blacklistUser(userid) {

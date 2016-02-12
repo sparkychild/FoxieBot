@@ -19,6 +19,11 @@ class botGame {
         delete this.users[oldId];
         this.userList.splice(this.userList.indexOf(oldId), 1, newId);
         this.users[newId].rename(newName);
+        if(this.currentPlayer && this.currentPlayer === oldId) this.currentPlayer = newId;
+    }
+    
+    sendRoom (message) {
+        this.room.send(null, message);
     }
     
     onJoin (user) {
@@ -37,6 +42,7 @@ class botGame {
     }
     
     destroy () {
+        if(this.timer) clearTimeout(this.timer);
         delete this.room.game;
     }
 }

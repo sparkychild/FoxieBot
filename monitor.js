@@ -66,11 +66,11 @@ class ResourceMonitor {
                 this.lockdown = false;
                 log("monitor", "[ENDLOCKDOWN]")
             }
-
-        }.bind(this), 1800000)
+        }.bind(this), 1800000);
     }
     run(user, room, command, pm) {
         if (user.isDev()) return false;
+        if (command in Config.whitelistCommands) return false;
         //set up the objects
         //room
         if (room) {
@@ -79,7 +79,7 @@ class ResourceMonitor {
         }
         else {
             room = {
-                id: null
+                id: null,
             };
         }
         //user
