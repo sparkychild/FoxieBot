@@ -23,6 +23,11 @@ exports.commands = {
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "players");
     },
+    score: function(target, room, user) {
+        if (!room || !this.can("games") || !room.game) return false;
+        let gameId = room.game.gameId;
+        this.parse("/" + gameId + "score");
+    },
     start: function(target, room, user) {
         if (!room || !this.can("games") || !room.game) return false;
         let gameId = room.game.gameId;
@@ -33,6 +38,16 @@ exports.commands = {
         let gameId = room.game.gameId;
         this.parse("/" + gameId + "end");
     },
+    skip: function(target, room, user) {
+        if (!room || !this.can("games") || !room.game) return false;
+        let gameId = room.game.gameId;
+        this.parse("/" + gameId + "skip");
+    },
+    repost: function(target, room, user) {
+        if (!room || !this.can("games") || !room.game) return false;
+        let gameId = room.game.gameId;
+        this.parse("/" + gameId + "repost");
+    },
     signups: function(target, room, user) {
         if (!room || !this.can("games")) return false;
         if(!target) this.parse("/help signups");
@@ -41,6 +56,7 @@ exports.commands = {
             "unownsletterchain": "unownsletterchain",
             "bj": "blackjack",
             "blackjack": "blackjack",
+            "kunc": "kunc",
         };
         let gameId = games[toId(target)];
         if (!gameId) return this.send("Invalid game.");
