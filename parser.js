@@ -63,13 +63,13 @@ exports.parse = {
                 break;
             case "title":
                 room.name = parts[2];
-                log("join", room.name);
+                log("join", toId(room.name) === toId(room.id) ? room.name : room.name + " - (" + room.id + ")");
                 break;
             case "c":
                 message = parts.slice(3).join("|");
                 if (toId(parts[2])) {
                     user = Users.get(parts[2]);
-                    user.update(room, parts[2]);
+                    user.update(room, parts[3]);
                     room.moderate(user, message);
                     commandParser(message, user, room, !Config.monitorDefault);
                 }
@@ -110,6 +110,7 @@ exports.parse = {
                     user.update(room, parts[2]);
                 }
                 break;
+            case "noinit":
             case "deinit":
                 if(room.name === "global") {
                     log("monitor", "Banned from server (left room global).")

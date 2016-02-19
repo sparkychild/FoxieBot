@@ -3,7 +3,7 @@
 Tools.Formats = require("./data/pokemon.js").BattleFormatsData;
 Tools.Pokedex = require("./data/pokedex.js").BattlePokedex;
 Tools.helpEntries = require("./help.js").help;
-
+Tools.Movedex = require("./data/moves.js").BattleMovedex;
 
 exports.commands = {
     say: function(target, room, user) {
@@ -151,7 +151,7 @@ exports.commands = {
     settings: function(target, room, user) {
         let targetRoom = room;
         if (target) {
-            if (Rooms.rooms.has(toId(target))) {
+            if (Rooms.rooms.has(toId(target, true))) {
                 targetRoom = Rooms.get(target);
             }
             else {

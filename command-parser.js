@@ -86,7 +86,7 @@ exports.commandParser = function(message, user, room, bypassMonitor) {
         roomCCon = Db("customcommands").get([room.id, command], null);
     }
     let customCommand = roomCCon || globalCCon;
-    if (customCommand) {
+    if (customCommand && !userIsBanned) {
         Plugins.runCustomCommand(target, room, user, customCommand, !room);
         Monitor.run(user, room, "customcommand", !room);
         return;

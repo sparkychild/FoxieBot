@@ -20,7 +20,7 @@ exports.commands = {
         target = toId(target);
         let lastSeen = Db("seen").get(target, null);
         if (!lastSeen) return this.send("**" + target + "** was never seen before.");
-        let seenRoom = Db("settings").get([toId(lastSeen[1]), "isPrivate"], false) && ((!user.isDev() && !user.isStaff) || room) ? "a private room" : lastSeen[1];
+        let seenRoom = Db("settings").get([toId(lastSeen[1], true), "isPrivate"], false) && ((!user.isDev() && !user.isStaff) || room) ? "a private room" : lastSeen[1];
         this.send("**" + target + "** was last seen " + Tools.getTimeAgo(lastSeen[0]) + " ago in " + seenRoom + ".");
     },
     uptime: function(target, room, user) {
@@ -59,9 +59,9 @@ exports.commands = {
         //get stats
         let parts = target.split(",");
         
-        if (!Tools.Pokedex[toId(parts[0])]) return this.send("Invalid Pokémon.");
+        if (!Tools.Formats[toId(parts[0])]) return this.send("Invalid Pokémon.");
         
-        let tier = toId(parts[1]) || toId(Tools.Pokedex[toId(parts[0])].tier).replace("nfe", "pu");
+        let tier = toId(parts[1]) || toId(Tools.Formats[toId(parts[0])].tier).replace("nfe", "pu");
         let mon = toId(parts[0]);
         
         if (!mon || !tier) return this.parse("/help usage");
