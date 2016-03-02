@@ -55,9 +55,9 @@ class botGamePlayer {
     }
     
     rename (name) {
-        this.name = name;
         this.userid = toId(name);
         this.user = Users.get(this.userid);
+        this.name = this.user.name;
     }
 }
 
