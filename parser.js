@@ -101,14 +101,7 @@ exports.parse = {
                 room.userLeave(parts[2]);
                 break;
             case "N":
-                if (toId(parts[3]) !== toId(parts[2])) {
-                    room.userRename(toId(parts[3]), parts[2]);
-                }
-                else {
-                    user = Users.get(parts[2]);
-                    user.name = parts[2].slice(1);
-                    user.update(room, parts[2]);
-                }
+                room.userRename(toId(parts[3]), parts[2]);
                 break;
             case "noinit":
             case "deinit":
