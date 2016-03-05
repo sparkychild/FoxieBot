@@ -95,11 +95,13 @@ exports.commands = {
     },
     mute: function(target, room, user) {
         if (!target || !this.can("mute")) return false;
+        if (Monitor.isBanned(this.targetUser.userid || this.targetUser) && ["lock", "ban"].includes(Monitor.isBanned(this.targetUser.userid || this.targetUser))) return this.send("The user is already locked/banned.");
         Monitor.mute(this.targetUser.userid || this.targetUser);
         this.send((this.targetUser.name || this.targetUser) + " was muted from using the bot for 7 minutes by " + user.name + ".");
     },
     lock: function(target, room, user) {
         if (!target || !this.can("lock")) return false;
+        if (Monitor.isBanned(this.targetUser.userid || this.targetUser) && Monitor.isBanned(this.targetUser.userid || this.targetUser) === "ban") return this.send("The user is already banned.");
         Monitor.lock(this.targetUser.userid || this.targetUser);
         this.send((this.targetUser.name || this.targetUser) + " was locked from using the bot by " + user.name + ".");
     },

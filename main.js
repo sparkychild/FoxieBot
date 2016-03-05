@@ -46,7 +46,7 @@ if (!Object.select) {
 
 global.fs = require("fs");
 global.toId = function(text, id) {
-    if (!text || typeof text !== "string") return null;
+    if (!text || typeof text !== "string") return "";
     if (id) return text.toLowerCase().replace(/[^a-z0-9\-]/g, "");
     return text.toLowerCase().replace(/[^a-z0-9]/g, "");
 };
@@ -193,7 +193,7 @@ global.send = function(text, user, priority, bypass) {
     if (!user) {
         user = toId(Config.bot.name);
     }
-    if (Date.now() - lastSent < 620 && !bypass) {
+    if (Date.now() - lastSent < 650 && !bypass) {
         if (!priority) {
             sendQueue.push([text, user]);
         }

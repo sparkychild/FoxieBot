@@ -149,6 +149,7 @@ exports.commands = {
         this.send(target + " was successfully removed from the blacklist.");
     },
     settings: function(target, room, user) {
+        if (!room && !target) return user.sendTo("Please specify the room.");
         let targetRoom = room;
         if (target) {
             if (Rooms.rooms.has(toId(target, true))) {
@@ -156,7 +157,7 @@ exports.commands = {
             }
             else {
                 if (!room || this.can("settings")) {
-                    return user.sendTo("The bot is not in the room you specified.")
+                    return user.sendTo("The bot is not in the room you specified.");
                 }
                 return false;
             }
@@ -191,7 +192,7 @@ exports.commands = {
                 "| Blacklisted Users    |\n" +
                 "+----------------------+\n";
             if (targetRoom.blacklist && Object.keys(targetRoom.blacklist).length) {
-                buffer += Object.keys(targetRoom.blacklist).map(function(w) {
+                buffer += Object.keys(targetRoom.blacklist).sort().map(function(w) {
                     return "| - " + w + "                   ".slice(w.length) + "|";
                 }).join("\n") + "\n";
             }

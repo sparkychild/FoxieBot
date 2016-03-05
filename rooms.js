@@ -80,9 +80,6 @@ class Room {
     }
 
     userRename(oldId, newName) {
-        if (this.game) {
-            this.game.onRename(oldId, newName);
-        }
         if (this.userData[oldId]) {
             this.userData[toId(newName)] = this.userData[oldId];
             delete this.userData[oldId];
@@ -90,6 +87,9 @@ class Room {
         this.userLeave(oldId);
         Users.rename(oldId, newName);
         this.userJoin(newName);
+        if (this.game) {
+            this.game.onRename(oldId, newName);
+        }
     }
 
     send(userid, message, priority) {
