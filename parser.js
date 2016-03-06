@@ -87,7 +87,7 @@ exports.parse = {
                 if (toId(pmUsername) === toId(Monitor.username)) return;
                 user = Users.get(pmUsername);
                 user.updateGlobalRank(pmUsername.charAt(0));
-                if (message.indexOf("/invite ") === 0) {
+                if (message.indexOf("/invite ") === 0 && user.isStaff) {
                     send("|/join " + message.slice(8));
                 }
                 commandParser(message, user, null, false);
