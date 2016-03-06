@@ -80,7 +80,7 @@ class Room {
     }
 
     userRename(oldId, newName) {
-        if (this.userData[oldId]) {
+        if (this.userData[oldId] && toId(newName) !== oldId) {
             this.userData[toId(newName)] = this.userData[oldId];
             delete this.userData[oldId];
         }
