@@ -57,5 +57,9 @@ exports.commands = {
         Tools.uploadToHastebin(hastebin, function(link) {
             this.send("Custom commands for room " + targetRoom + ": " + link);
         }.bind(this));
-    }
+    },
+    alias: function (target, room, user) {
+        if (!target || target.indexOf(",") === -1) return false;
+        this.parse("/addcom " + target.replace(/, ?[^a-z0-9]?/i, ", ,{parse}/"));
+    },
 };

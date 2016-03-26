@@ -1,6 +1,6 @@
 'use strict';
 exports.Plugins = {
-    runCustomCommand: function(target, room, user, customCommand, pm) {
+    runCustomCommand: function(target, room, user, customCommand, pm, levelsDeep) {
         function broadcastCommand(message) {
             if (user.hasRank(room, customCommand.rank) && !pm) {
                 room.send(user.userid, message);
@@ -11,8 +11,14 @@ exports.Plugins = {
         }
         let broadcastText = customCommand.text;
         target = target.replace(/\, /g, ",").split(",");
+        // for command aliases 
+        if (broadcastText[0].indexOf("{parse}") === 0) {
+            // command to parse
+            let newCommand = broadcastText[0].slice(7).trim();
+            return commandParser(newCommand.replace(/^\//i, (!pm ? room.commandCharacter[0] : Config.defaultCharacter[0])), user, room, !Config.monitorDefault, levelsDeep + 1);
+        }
         broadcastText.forEach(function(returnText, postIndex) {
-            //old custom command code from sparkyboTTT
+            // old custom command code from sparkyboTTT
             returnText = returnText.replace(/{arg}/g, '{arg[0]}').split('{');
             for (let i = 0; i < returnText.length; i++) {
                 if (!returnText[i].replace(/ /g, '')) {
