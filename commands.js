@@ -101,7 +101,18 @@ exports.commands = {
         else if (parseInt(target[target.length - 1]) >= 1) {
             points = parseInt(target[target.length - 1]);
         }
-        if (cmd !== "regexbanword") regexBanword = Tools.regexify(regexBanword.trim());
+        if (cmd !== "regexbanword") {
+            regexBanword = Tools.regexify(regexBanword.trim());
+        } else {
+            // test for evil regex
+            if (/(?!\\)\(.*?[\*\+\?][^\)]*?(?!\\)\)([\*\+]|\{[0-9]+(\,|\,?[0-9]*?)\})/i.test(regexBanword)) return this.send("Sorry, I cannot accept that as a regexbanword as your banned phrase may contain some [[evil regex]]...");
+            // test if it's actually working regex
+            try {
+                let test = new RegExp(regexBanword);
+            } catch (e) {
+                return this.errorReply(e.message.substr(0, 28) === 'Invalid regular expression: ' ? e.message : 'Invalid regular expression: /' + regexBanword + '/: ' + e.message);
+            }
+        }
         if (!regexBanword) return this.parse("/help " + (cmd === "bw" ? "banword" : cmd));
         let banwordExists = Db("settings").get([room.id, "bannedWords", regexBanword], null);
         if (banwordExists) return this.send("That already exists as a banned phrase in this room.");
