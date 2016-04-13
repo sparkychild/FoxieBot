@@ -105,7 +105,7 @@ exports.commands = {
             regexBanword = Tools.regexify(regexBanword.trim());
         } else {
             // test for evil regex
-            if (/(?!\\)\(.*?[\*\+\?][^\)]*?(?!\\)\)([\*\+]|\{[0-9]+(\,|\,?[0-9]*?)\})/i.test(regexBanword)) return this.send("Sorry, I cannot accept that as a regexbanword as your banned phrase may contain some [[evil regex]]...");
+            if (/(?!\\)\(.*?(?:[^\\])[\*\+\?][^\)]*?(?!\\)\)([\*\+]|\{[0-9]+(\,|\,?[0-9]*?)\})/i.test(regexBanword)) return this.send("Sorry, I cannot accept that as a regexbanword as your banned phrase may contain some [[evil regex]]...");
             // test if it's actually working regex
             try {
                 let test = new RegExp(regexBanword);
