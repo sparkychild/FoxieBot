@@ -182,9 +182,9 @@ let lastSent = 0;
 
 function dequeue() {
     if (sendQueue.length > 0) {
+        dequeuing = false;
         let tempText = sendQueue.shift();
         send(tempText[0], tempText[1], false, true);
-        dequeuing = false;
     }
 }
 
@@ -218,10 +218,10 @@ global.send = function(text, user, priority, bypass) {
     if (sendQueue.length > 0) {
         setTimeout(function() {
             dequeue();
-        }, 650 - (Date.now() - lastSent));
+        }, 650);
         dequeuing = true;
     }
-}
+};
 
 
 global.clearQueue = function(user) {
