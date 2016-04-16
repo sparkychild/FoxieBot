@@ -1,0 +1,8 @@
+/node_modules
+/node_modules/*
+npm-debug.log
+config.js
+
+.hg
+.bzr
+.svn
