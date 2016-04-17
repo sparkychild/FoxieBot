@@ -1,4 +1,7 @@
 "use strict";
+const path = require("sys");
+const sys = require("sys");
+
 Array.prototype.sum = function() {
     return this.reduce(function(pv, cv) {
         return pv + cv;
@@ -83,6 +86,19 @@ global.getEST = function(date) {
     return new Date(d).toLocaleString();
 };
 
+if (!fs.existsSync("./config/config.js")) {
+	console.log("config.js not found! - Creating with default settings...");
+	fs.writeFileSync("./config/config.js", fs.readFileSync('./config/config-example.js'));
+}
+
+global.Config = require("./config/config.js");
+if (!Config.info.server || !Config.info.serverid || !Config.info.port) {
+    log("error", "You need to fill out the config file!");
+}
+if (Config.defaultCharacter.length === 0) {
+    Config.defaultCharacter.push("+");
+}
+
 global.log = function(item, text) {
     if (!Config.logging || (Config.logging !== true && (typeof Config.logging && !Config.logging.includes(item)))) return false;
     let d = getEST();
@@ -96,16 +112,6 @@ global.log = function(item, text) {
         "left": "magenta",
     };
     console.log("[" + d + "] " + item.toUpperCase()[fontColours[item] || "blue"] + "        ".slice(item.length) + text);
-}
-
-var sys = require("sys");
-
-global.Config = require("./config/config.js");
-if (!Config.info.server || !Config.info.serverid || !Config.info.port) {
-    log("error", "You need to fill out the config file!");
-}
-if (Config.defaultCharacter.length === 0) {
-    Config.defaultCharacter.push("+");
 }
 
 //get the database
@@ -159,7 +165,6 @@ loadChatPlugins();
 
 //globals
 
-let path = require("path");
 if (Config.watchConfig) {
     fs.watchFile(path.resolve(__dirname, "config/config.js"), function(curr, prev) {
         if (curr.mtime <= prev.mtime) return;
