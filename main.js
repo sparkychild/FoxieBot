@@ -1,5 +1,5 @@
 "use strict";
-const path = require("sys");
+const path = require("path");
 const sys = require("sys");
 
 Array.prototype.sum = function() {
