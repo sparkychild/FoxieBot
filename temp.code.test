@@ -1,0 +1,198 @@
+'use strict';
+ 
+ 
+ 
+const Room = require('./../rooms').Room; // eslint-disable-line no-unused-vars
+ 
+const User = require('./../users').User; // eslint-disable-line no-unused-vars
+ 
+ 
+ 
+const name = "Guess That Mascot";
+ 
+ 
+ 
+const data =
+ 
+ 
+ 
+for (let i in Tools.data.mascots) {
+ 
+    let mascot = Tools.data.mascots[i];
+ 
+    if (!mascot.name) continue;
+ 
+ 
+    let auth = mascot.auth;
+ 
+    if (!auth) continue;
+ 
+    if (!(auth in data["Guess That Mascot"])) data["Guess That Mascot"][auth] = [];
+ 
+    data["Guess That Mascot"][auth].push(mascot.name);
+ 
+}
+ 
+ 
+ 
+class GuessThatMascot extends Games.Game {
+ 
+    constructor(room) {
+ 
+        super(room);
+ 
+        this.freeJoin = true;
+ 
+        this.answers = null;
+ 
+        this.timeout = null;
+ 
+        this.hint = '';
+ 
+        this.points = new Map();
+ 
+        this.maxPoints = 3;
+ 
+        this.categories = Object.keys(data);
+ 
+        this.questions = {};
+ 
+        for (let i = 0, len = this.categories.length; i < len; i++) {
+ 
+            this.questions[this.categories[i]] = Object.keys(data[this.categories[i]]);
+ 
+        }
+ 
+    }
+ 
+ 
+ 
+    onSignups() {
+ 
+        this.timeout = setTimeout(() => this.nextRound(), 10 * 1000);
+ 
+    }
+ 
+ 
+ 
+    setAnswers() {
+ 
+        let category;
+ 
+        if (this.variation) {
+ 
+            category = this.variation;
+ 
+        } else {
+ 
+            category = Tools.sample(this.categories);
+ 
+        }
+ 
+        let question = Tools.sample(this.questions);
+ 
+        this.answers = data[question];
+ 
+        this.hint = "This Pokemon is the mascot of __" + question  + "__";
+ 
+    }
+ 
+ 
+ 
+    onNextRound() {
+ 
+        if (this.answers) {
+ 
+            this.say("Time's up! The answer" + (this.answers.length > 1 ? "s were" : " was") + " __" + this.answers.join(", ") + "__");
+ 
+        }
+ 
+        this.setAnswers();
+ 
+        this.on(this.hint, () => {
+ 
+            this.timeout = setTimeout(() => this.nextRound(), 10 * 1000);
+ 
+        });
+ 
+        this.say(this.hint);
+ 
+    }
+ 
+    checkAnswer(guess) {
+ 
+        if (!this.answers) return false;
+ 
+        guess = Tools.toId(guess);
+ 
+        for (let i = 0, len = this.answers.length; i < len; i++) {
+ 
+            if (Tools.toId(this.answers[i]) === guess) {
+ 
+                return true;
+ 
+            }
+ 
+        }
+ 
+    guess(guess, user) {
+ 
+        if (!this.answers || !this.checkAnswer(guess)) return;
+ 
+        if (this.timeout) clearTimeout(this.timeout);
+ 
+        if (!(user.id in this.players)) this.addPlayer(user);
+ 
+        let player = this.players[user.id];
+ 
+        let points = this.points.get(player) || 0;
+ 
+        points += 1;
+ 
+        this.points.set(player, points);
+ 
+        if (points >= this.maxPoints) {
+ 
+            this.winners.set(player, points);
+ 
+            this.say("Correct! " + user.name + " wins the game! (Answer" + (this.answers.length > 1 ? "s" : "") + ": __" + this.answers.join(", ") + "__)");
+ 
+            this.end();
+ 
+            return;
+ 
+        }
+ 
+        this.say("Correct! " + user.name + " advances to " + points + " point" + (points > 1 ? "s" : "") + ". (Answer" + (this.answers.length > 1 ? "s" : "") + ": __" + this.answers.join(", ") + "__)");
+ 
+        this.answers = null;
+ 
+        this.timeout = setTimeout(() => this.nextRound(), 5 * 1000);
+ 
+    }
+ 
+}
+ 
+ 
+ 
+exports.name = name;
+ 
+exports.id = Tools.toId(name);
+ 
+exports.description = "Guess the Pokemon Mascot of the given Roomauth (voice and up).";
+ 
+exports.commands = {
+ 
+    "guess": "guess",
+ 
+    "g": "guess",
+ 
+};
+ 
+exports.aliases = ["gtm"]
+ 
+exports.modes = ["Survival", "Team"];
+ 
+// exports.install = Guess That Mascot;
+ 
+exports.game = Guess That Mascot;
